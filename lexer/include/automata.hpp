@@ -6,6 +6,7 @@
 #define LEXER_AUTOMATA_HPP
 
 #include <vector>
+
 #define ARR_SIZE(arr)   sizeof(arr) / sizeof(*arr)
 
 enum TokenType {BOOL, NONE};
