@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "../include/automata.hpp"
 #include "../include/tokens.hpp"
 
@@ -15,14 +16,12 @@ static const DFAListItem TokensDFA[] = {
 size_t match_with_alphabet(Alphabet alphabet, std::string &str) {
     switch (alphabet) {
         case DIGIT:
-            break;
+            return (str[0] >= '0' && str[0] <= '9') ? 1 : 0;
         case LETTER:
-            break;
-        case NUMBERS:
-            break;
+            return isalpha(str[0]) ? 1 : 0;
         case POSITIVE_INT:
-            break;
-    };
+            return (str[0] >= '1' && str[0] <= '9') ? 1 : 0;
+    }
     return 0;
 }
 
@@ -89,9 +88,9 @@ Token get_next_token(std::string &str, const DFAListItem *dfas) {
     return {NONE, ""};
 }
 
-int main() {
+std::vector<Token> get_tokens(std::string char_stream)
+{
     std::vector<Token> tokens;
-    std::string char_stream("true  ");
     Token current_token;
 
     do {
@@ -104,7 +103,18 @@ int main() {
                 break;
             }
         }
-        std::cout << tokens.size() << std::endl;
     } while (current_token.type != NONE);
+    return tokens;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        std::cerr << "A filename should be provided" << std::endl;
+        return EXIT_FAILURE;
+    }
+    std::ifstream source_file(argv[1]);
+    std::string str((std::istreambuf_iterator<char>(source_file)),
+                    std::istreambuf_iterator<char>());
+
     return 0;
 }
