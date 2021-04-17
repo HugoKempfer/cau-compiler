@@ -8,7 +8,7 @@
 
 void print_tokens(std::vector<Token> const &tokens) {
     if (!tokens.empty() && tokens.back().type == NONE) {
-        size_t line_nb = 0;
+        size_t line_nb = 1;
 
         for (auto &token : tokens) {
             if (token.type == NONE) {
@@ -32,7 +32,7 @@ void print_tokens(std::vector<Token> const &tokens) {
 }
 
 void write_error_report(std::ofstream &file, const std::vector<Token> &tokens) {
-    size_t line_nb = 0;
+    size_t line_nb = 1;
 
     for (auto &token : tokens) {
         if (token.type == NONE) {
