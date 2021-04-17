@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-using DFA = struct State*;
+using DFA = const struct State*;
 
 enum TokenType { BOOL, NONE };
 enum Alphabet { DIGIT, LETTER, NUMBERS, POSITIVE_INT };
