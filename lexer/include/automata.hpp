@@ -6,20 +6,26 @@
 #define LEXER_AUTOMATA_HPP
 
 #include <vector>
+#include <string>
 
-#define ARR_SIZE(arr) sizeof(arr) / sizeof(*arr)
+using DFA = struct State*;
 
 enum TokenType { BOOL, NONE };
 enum Alphabet { DIGITS, LETTERS, NUMBERS, POSITIVE_INT };
 
 struct State;
 
+typedef struct {
+    TokenType type;
+    std::string value;
+} Token;
+
 typedef struct Transition {
   enum { ALPH, EXPR, DFA } value_type;
   union {
     enum Alphabet alphabet;
     const char *expression;
-    const struct State *dfa;
+    const ::DFA dfa;
   } value;
   enum { A, B, C, D, E, F, G, H, I } new_state;
 } Transition;
