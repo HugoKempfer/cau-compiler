@@ -10,25 +10,25 @@ typedef struct {
 } DFAListItem;
 
 static const DFAListItem TokensDFA[] = {
-        {KeywordsToken, KEYWORD},
-        {VTypeToken, V_TYPE},
-        {IterativeToken, ITERATIVE},
+        {KeywordsToken,    KEYWORD},
+        {VTypeToken,       V_TYPE},
+        {IterativeToken,   ITERATIVE},
         {ConditionalToken, CONDITIONAL},
-        {ArithOpToken, ARTITH_OP},
-        {SIntToken, S_INT},
-        {IDToken, ID},
-        {LiteralToken, LITERAL},
-        {CmpOpToken, CMP_OP},
-        {BlockToken, BLOCK},
-        {ParenToken, PAREN},
-        {SCToken, SC},
-        {ArrayToken, ARRAY},
-        {AssignToken, ASSIGN},
-        {CommaToken, COMMA},
-        {BoolToken, BOOL},
-        {SCharToken, S_CHAR},
-        {WhiteSpaceToken, WHITESPACE},
-        {nullptr,   NONE}
+        {SIntToken,        S_INT},
+        {ArithOpToken,     ARTITH_OP},
+        {IDToken,          ID},
+        {LiteralToken,     LITERAL},
+        {CmpOpToken,       CMP_OP},
+        {BlockToken,       BLOCK},
+        {ParenToken,       PAREN},
+        {SCToken,          SC},
+        {ArrayToken,       ARRAY},
+        {AssignToken,      ASSIGN},
+        {CommaToken,       COMMA},
+        {BoolToken,        BOOL},
+        {SCharToken,       S_CHAR},
+        {WhiteSpaceToken,  WHITESPACE},
+        {nullptr,          NONE}
 };
 
 size_t match_with_alphabet(Alphabet alphabet, std::string &str) {
@@ -98,17 +98,17 @@ Token get_next_token(std::string &str, const DFAListItem *dfas, TokenType previo
     for (auto current_dfa = dfas; current_dfa->type != NONE; ++current_dfa) {
         auto res = match_dfa(str, current_dfa->dfa);
         if (res > 0) {
-            if (current_dfa->type == ARTITH_OP && previous_token_type != S_INT) {
+            Token token = {current_dfa->type, str.substr(0, res)};
+            if (token.type == S_INT && token.value[0] == '-' && previous_token_type == S_INT) {
                 continue;
             }
-            return {current_dfa->type, str.substr(0, res)};
+            return token;
         }
     }
     return {NONE, ""};
 }
 
-std::vector<Token> get_tokens(std::string char_stream)
-{
+std::vector<Token> get_tokens(std::string char_stream) {
     std::vector<Token> tokens;
     Token current_token = {NONE, ""};
 
