@@ -11,7 +11,7 @@
 using DFA = const struct State*;
 
 enum TokenType { BOOL, NONE };
-enum Alphabet { DIGIT, LETTER, NUMBERS, POSITIVE_INT };
+enum Alphabet { DIGIT, LETTER, POSITIVE_INT };
 
 struct State;
 

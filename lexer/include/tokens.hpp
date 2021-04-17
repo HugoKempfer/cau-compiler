@@ -10,6 +10,10 @@ static const State WhiteSpaceToken[] = {
       {Transition::EXPR, {.expression = "\t"}, Transition::B}}},
     {true, {}}};
 
+static const State NumbersToken[] = {
+    {false, {{Transition::ALPH, {.alphabet = Alphabet::DIGIT}, Transition::B}}},
+    {true, {{Transition::ALPH, {.alphabet = Alphabet::DIGIT}, Transition::B}}}};
+
 static const State VTypeToken[] = {
     {false,
      {{Transition::EXPR, {.expression = "int"}, Transition::B},
@@ -26,10 +30,8 @@ static const State SIntToken[] = {
     {false,
      {{Transition::ALPH, {.alphabet = Alphabet::POSITIVE_INT}, Transition::D}}},
     {true, {}},
-    {true,
-     {{Transition::ALPH, {.alphabet = Alphabet::NUMBERS}, Transition::E}}},
-    {true,
-     {{Transition::ALPH, {.alphabet = Alphabet::NUMBERS}, Transition::E}}}};
+    {true, {{Transition::DFA, {.dfa = NumbersToken}, Transition::E}}},
+    {true, {{Transition::DFA, {.dfa = NumbersToken}, Transition::E}}}};
 
 static const State SCharToken[] = {
     {false, {{Transition::EXPR, {.expression = "'"}, Transition::B}}},
@@ -58,7 +60,7 @@ static const State IDToken[] = {
       {Transition::EXPR, {.expression = "_"}, Transition::B}}},
     {true,
      {{Transition::ALPH, {.alphabet = Alphabet::LETTER}, Transition::B},
-      {Transition::ALPH, {.alphabet = Alphabet::NUMBERS}, Transition::B},
+      {Transition::DFA, {.dfa = NumbersToken}, Transition::B},
       {Transition::EXPR, {.expression = "_"}, Transition::B}}}};
 
 static const State ConditionalToken[] = {

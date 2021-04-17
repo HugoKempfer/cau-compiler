@@ -18,8 +18,6 @@ size_t match_with_alphabet(Alphabet alphabet, std::string &str) {
             break;
         case LETTER:
             break;
-        case NUMBERS:
-            break;
         case POSITIVE_INT:
             break;
     };
