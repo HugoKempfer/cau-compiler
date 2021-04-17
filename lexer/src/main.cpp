@@ -15,6 +15,7 @@ static const DFAListItem TokensDFA[] = {
         {IterativeToken, ITERATIVE},
         {ConditionalToken, CONDITIONAL},
         {ArithOpToken, ARTITH_OP},
+        {SIntToken, S_INT},
         {IDToken, ID},
         {LiteralToken, LITERAL},
         {CmpOpToken, CMP_OP},
@@ -25,7 +26,6 @@ static const DFAListItem TokensDFA[] = {
         {AssignToken, ASSIGN},
         {CommaToken, COMMA},
         {BoolToken, BOOL},
-        {SIntToken, S_INT},
         {SCharToken, S_CHAR},
         {WhiteSpaceToken, WHITESPACE},
         {nullptr,   NONE}
@@ -98,7 +98,7 @@ Token get_next_token(std::string &str, const DFAListItem *dfas, TokenType previo
     for (auto current_dfa = dfas; current_dfa->type != NONE; ++current_dfa) {
         auto res = match_dfa(str, current_dfa->dfa);
         if (res > 0) {
-            if (current_dfa->type == ARTITH_OP && previous_token_type == ARTITH_OP) {
+            if (current_dfa->type == ARTITH_OP && previous_token_type != S_INT) {
                 continue;
             }
             return {current_dfa->type, str.substr(0, res)};
