@@ -3,4 +3,4 @@ project(lexer)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lexer src/main.cpp src/automata.cpp include/automata.hpp)
+add_executable(lexer src/main.cpp src/automata.cpp include/automata.hpp src/serializer.cpp include/serializer.hpp)

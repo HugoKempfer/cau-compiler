@@ -2,6 +2,7 @@
 #include <fstream>
 #include "../include/automata.hpp"
 #include "../include/tokens.hpp"
+#include "../include/serializer.hpp"
 
 typedef struct {
     const State *dfa;
@@ -9,7 +10,24 @@ typedef struct {
 } DFAListItem;
 
 static const DFAListItem TokensDFA[] = {
-        {BoolToken, TokenType::BOOL},
+        {KeywordsToken, KEYWORD},
+        {VTypeToken, V_TYPE},
+        {IterativeToken, ITERATIVE},
+        {ConditionalToken, CONDITIONAL},
+        {ArithOpToken, ARTITH_OP},
+        {IDToken, ID},
+        {LiteralToken, LITERAL},
+        {CmpOpToken, CMP_OP},
+        {BlockToken, BLOCK},
+        {ParenToken, PAREN},
+        {SCToken, SC},
+        {ArrayToken, ARRAY},
+        {AssignToken, ASSIGN},
+        {CommaToken, COMMA},
+        {BoolToken, BOOL},
+        {SIntToken, S_INT},
+        {SCharToken, S_CHAR},
+        {WhiteSpaceToken, WHITESPACE},
         {nullptr,   NONE}
 };
 
@@ -48,13 +66,13 @@ size_t match_dfa(std::string &str, const State *dfa) {
         for (auto transition : current_state->transitions) {
             switch (transition.value_type) {
                 case Transition::ALPH:
-                    res = match_with_alphabet(transition.value.alphabet, str);
+                    res = match_with_alphabet(transition.value.alphabet, char_stream);
                     break;
                 case Transition::EXPR:
-                    res = match_with_expression(transition.value.expression, str);
+                    res = match_with_expression(transition.value.expression, char_stream);
                     break;
                 case Transition::DFA:
-                    res = match_dfa(str, transition.value.dfa);
+                    res = match_dfa(char_stream, transition.value.dfa);
                     break;
             }
             if (res > 0) {
@@ -76,14 +94,15 @@ size_t match_dfa(std::string &str, const State *dfa) {
     }
 }
 
-Token get_next_token(std::string &str, const DFAListItem *dfas) {
-    auto current_dfa = dfas;
-    while (current_dfa->type != NONE) {
+Token get_next_token(std::string &str, const DFAListItem *dfas, TokenType previous_token_type) {
+    for (auto current_dfa = dfas; current_dfa->type != NONE; ++current_dfa) {
         auto res = match_dfa(str, current_dfa->dfa);
         if (res > 0) {
+            if (current_dfa->type == ARTITH_OP && previous_token_type == ARTITH_OP) {
+                continue;
+            }
             return {current_dfa->type, str.substr(0, res)};
         }
-        ++current_dfa;
     }
     return {NONE, ""};
 }
@@ -91,10 +110,10 @@ Token get_next_token(std::string &str, const DFAListItem *dfas) {
 std::vector<Token> get_tokens(std::string char_stream)
 {
     std::vector<Token> tokens;
-    Token current_token;
+    Token current_token = {NONE, ""};
 
     do {
-        current_token = get_next_token(char_stream, TokensDFA);
+        current_token = get_next_token(char_stream, TokensDFA, current_token.type);
         if (current_token.type != NONE) {
             tokens.push_back(current_token);
             try {
@@ -116,5 +135,7 @@ int main(int argc, char *argv[]) {
     std::string str((std::istreambuf_iterator<char>(source_file)),
                     std::istreambuf_iterator<char>());
 
-    return 0;
+    auto tokens = get_tokens(str);
+    print_tokens(tokens);
+    return EXIT_SUCCESS;
 }

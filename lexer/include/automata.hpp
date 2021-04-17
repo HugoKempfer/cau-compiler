@@ -8,10 +8,32 @@
 #include <vector>
 #include <string>
 
-using DFA = const struct State*;
+using DFA = const struct State *;
 
-enum TokenType { BOOL, NONE };
-enum Alphabet { DIGIT, LETTER, NUMBERS, POSITIVE_INT };
+enum TokenType {
+    BOOL,
+    KEYWORD,
+    ITERATIVE,
+    CONDITIONAL,
+    ARTITH_OP,
+    ASSIGN,
+    CMP_OP,
+    SC,
+    BLOCK,
+    PAREN,
+    ARRAY,
+    COMMA,
+    V_TYPE,
+    ID,
+    LITERAL,
+    S_INT,
+    S_CHAR,
+    WHITESPACE,
+    NONE
+};
+enum Alphabet {
+    DIGIT, LETTER, POSITIVE_INT
+};
 
 struct State;
 
@@ -21,18 +43,22 @@ typedef struct {
 } Token;
 
 typedef struct Transition {
-  enum { ALPH, EXPR, DFA } value_type;
-  union {
-    enum Alphabet alphabet;
-    const char *expression;
-    const ::DFA dfa;
-  } value;
-  enum { A, B, C, D, E, F, G, H, I } new_state;
+    enum {
+        ALPH, EXPR, DFA
+    } value_type;
+    union {
+        enum Alphabet alphabet;
+        const char *expression;
+        const ::DFA dfa;
+    } value;
+    enum {
+        A, B, C, D, E, F, G, H, I
+    } new_state;
 } Transition;
 
 struct State {
-  bool is_accepting;
-  std::vector<Transition> transitions;
+    bool is_accepting;
+    std::vector<Transition> transitions;
 };
 
 #endif // LEXER_AUTOMATA_HPP
