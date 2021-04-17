@@ -9,6 +9,7 @@
 #define LEXER_SERIALIZER_HPP
 
 void print_tokens(std::vector<Token> const &);
+void write_to_file(std::string const &, const std::vector<Token> &);
 
 static const std::unordered_map<TokenType, std::string> TokenNames = {
 	{BOOL, "BOOL"},
@@ -30,5 +31,6 @@ static const std::unordered_map<TokenType, std::string> TokenNames = {
 	{S_CHAR, "S_CHAR"},
 	{WHITESPACE, "WHITESPACE"}
 };
+
 
 #endif //LEXER_SERIALIZER_HPP

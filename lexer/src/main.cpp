@@ -105,7 +105,7 @@ Token get_next_token(std::string &str, const DFAListItem *dfas, TokenType previo
             return token;
         }
     }
-    return {NONE, ""};
+    return {NONE, str};
 }
 
 std::vector<Token> get_tokens(std::string char_stream) {
@@ -113,15 +113,18 @@ std::vector<Token> get_tokens(std::string char_stream) {
     Token current_token = {NONE, ""};
 
     do {
+        if (char_stream.empty()) {
+            break;
+        }
         current_token = get_next_token(char_stream, TokensDFA, current_token.type);
         if (current_token.type != NONE) {
-            tokens.push_back(current_token);
             try {
                 char_stream = char_stream.substr(current_token.value.length(), char_stream.length());
             } catch (std::out_of_range &err) {
                 break;
             }
         }
+        tokens.push_back(current_token);
     } while (current_token.type != NONE);
     return tokens;
 }
@@ -137,5 +140,6 @@ int main(int argc, char *argv[]) {
 
     auto tokens = get_tokens(str);
     print_tokens(tokens);
-    return EXIT_SUCCESS;
+    write_to_file(argv[1], tokens);
+    return (!tokens.empty() && tokens.back().type == NONE) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
