@@ -42,17 +42,18 @@ typedef struct {
     std::string value;
 } Token;
 
+// Represent a transition to another state
 typedef struct Transition {
     enum {
-        ALPH, EXPR, DFA
-    } value_type;
+        ALPH, EXPR, DFA // Tag for union (Algebraic data type)
+    } value_type;		// can either be an expression to match, alphabet or a reference to another DFA
     union {
         enum Alphabet alphabet;
         const char *expression;
         const ::DFA dfa;
     } value;
     enum {
-        A, B, C, D, E, F, G, H, I
+        A, B, C, D, E, F, G, H, I // New state index
     } new_state;
 } Transition;
 

@@ -9,6 +9,7 @@ typedef struct {
     TokenType type;
 } DFAListItem;
 
+//Token matching table, the order define the lexing precedence
 static const DFAListItem TokensDFA[] = {
         {KeywordsToken,    KEYWORD},
         {VTypeToken,       V_TYPE},
@@ -31,6 +32,7 @@ static const DFAListItem TokensDFA[] = {
         {nullptr,          NONE}
 };
 
+// Check if a char is part of a charset (alphabet)
 size_t match_with_alphabet(Alphabet alphabet, std::string &str) {
     switch (alphabet) {
         case DIGIT:
@@ -43,6 +45,7 @@ size_t match_with_alphabet(Alphabet alphabet, std::string &str) {
     return 0;
 }
 
+// Check if the given expression is part of the charstream
 size_t match_with_expression(const std::string &expr, std::string &str) {
     try {
         if (str.substr(0, expr.length()) == expr) {
@@ -58,11 +61,12 @@ size_t match_with_expression(const std::string &expr, std::string &str) {
 size_t match_dfa(std::string &str, const State *dfa) {
     size_t res;
     size_t total_shift = 0;
-    auto current_state = &dfa[Transition::A];
-    auto char_stream = std::string(str);
+    auto current_state = &dfa[Transition::A]; // Set current state to entry A state
+    auto char_stream = std::string(str); // Local deep copy of charstream
 
     do {
         res = 0;
+		// Try each transition until one is valid
         for (auto transition : current_state->transitions) {
             switch (transition.value_type) {
                 case Transition::ALPH:
@@ -86,14 +90,15 @@ size_t match_dfa(std::string &str, const State *dfa) {
         } catch (std::out_of_range &err) {
             break;
         }
-    } while (res > 0);
+    } while (res > 0); // Keep trying to reach new state until stuck
     if (current_state->is_accepting) {
         return total_shift;
     } else {
-        return 0;
+        return 0; // 0 char are matched for this token DFA
     }
 }
 
+// Find next matching token in charstream
 Token get_next_token(std::string &str, const DFAListItem *dfas, TokenType previous_token_type) {
     for (auto current_dfa = dfas; current_dfa->type != NONE; ++current_dfa) {
         auto res = match_dfa(str, current_dfa->dfa);
