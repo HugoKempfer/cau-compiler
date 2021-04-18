@@ -15,6 +15,7 @@ static const DFAListItem TokensDFA[] = {
         {IterativeToken,   ITERATIVE},
         {ConditionalToken, CONDITIONAL},
         {SIntToken,        S_INT},
+        {BoolToken,        BOOL},
         {ArithOpToken,     ARTITH_OP},
         {IDToken,          ID},
         {LiteralToken,     LITERAL},
@@ -25,7 +26,6 @@ static const DFAListItem TokensDFA[] = {
         {ArrayToken,       ARRAY},
         {AssignToken,      ASSIGN},
         {CommaToken,       COMMA},
-        {BoolToken,        BOOL},
         {SCharToken,       S_CHAR},
         {WhiteSpaceToken,  WHITESPACE},
         {nullptr,          NONE}
