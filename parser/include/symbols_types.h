@@ -10,11 +10,47 @@
 using std::vector;
 
 typedef enum {
-
+	V_TYPE,
+	ID,
+	SEMI,
+	ASSIGN,
+	LITERAL,
+	CHARACTER,
+	BOOLSTR,
+	ADDSUB,
+	MULTDIV,
+	L_PAREN,
+	R_PAREN,
+	NUM,
+	L_BRACE,
+	R_BRACE,
+	COMMA,
+	IF,
+	WHILE,
+	COMP,
+	ELSE,
+	RETURN,
+	CLASS,
+	DOLLARS
 } Terminals;
 
 typedef enum {
-
+	CODE_PRIME,
+	CODE,
+	V_DECL,
+	ASSIGN,
+	RHS,
+	EXPR,
+	F_DECL,
+	ARG,
+	MOREARGS,
+	BLOCK,
+	STMT,
+	COND,
+	ELSE,
+	RETURN,
+	C_DECL,
+	O_DECL
 } NonTerminals;
 
 /* ---=== SLR TABLE ===--- */
