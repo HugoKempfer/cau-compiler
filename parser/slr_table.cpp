@@ -76,7 +76,27 @@ static const SLRTableEntry SLR_TABLE[] =
         {{{T_SEMI, REDUCE, NT_EXPR}, {T_ADDSUB, REDUCE, NT_EXPR}, {T_MULTDIV, REDUCE, NT_EXPR}, {T_R_PAREN, REDUCE, NT_EXPR}}}, // AMBIGIOUS
         {{{T_SEMI, REDUCE, NT_EXPR}, {T_ADDSUB, REDUCE, NT_EXPR}, {T_MULTDIV, REDUCE, NT_EXPR}, {T_R_PAREN, REDUCE, NT_EXPR}}},
         {{{T_RETURN, SHIFT, 55}}, {{NT_RETURN, 54}}},
-        {{{T_VTYPE, SHIFT, 51}, {T_ID, SHIFT, 52}, {T_R_BRACE, REDUCE, NT_BLOCK}, {T_IF, SHIFT, 49}, {T_WHILE, SHIFT, 50}, {T_RETURN, REDUCE, NT_BLOCK}}, {{NT_V_DECL, 47}, {NT_ASSIGN, 48}, {NT_BLOCK, 56}, {NT_STMT, 46}}}};
+        {{{T_VTYPE, SHIFT, 51}, {T_ID, SHIFT, 52}, {T_R_BRACE, REDUCE, NT_BLOCK}, {T_IF, SHIFT, 49}, {T_WHILE, SHIFT, 50}, {T_RETURN, REDUCE, NT_BLOCK}}, {{NT_V_DECL, 47}, {NT_ASSIGN, 48}, {NT_BLOCK, 56}, {NT_STMT, 46}}},
+        {{{T_VTYPE, REDUCE, NT_STMT}, {T_ID, REDUCE, NT_STMT}, {T_R_BRACE, REDUCE, NT_STMT}, {T_IF, REDUCE, NT_STMT}, {T_WHILE, REDUCE, NT_STMT}, {T_RETURN, REDUCE, NT_STMT}}, {}},
+        {{{T_SEMI, SHIFT, 57}}, {}},
+        {{{T_L_PAREN, SHIFT, 58}}, {}},
+        {{{T_L_PAREN, SHIFT, 58}}, {}},
+        {{{T_ID, SHIFT, 60}}, {{NT_ASSIGN, 11}}},
+        {{{T_ASSIGN, SHIFT, 15}}, {}},
+        {{{T_ID, SHIFT, 61}}, {}},
+        {{{T_R_BRACE, SHIFT, 62}}, {}},
+        {{{T_ID, SHIFT, 26}, {T_LITERAL, SHIFT, 22}, {T_CHARACTER, SHIFT, 23}, {T_BOOLSTR, SHIFT, 24}, {T_L_PAREN, SHIFT, 25}, {T_NUM, SHIFT, 27}}, {{NT_RHS, 63}, {NT_EXPR, 21}}},
+        {{{T_R_BRACE, REDUCE, NT_BLOCK}, {T_RETURN, REDUCE, NT_BLOCK}}, {}},
+        {{{T_VTYPE, REDUCE, NT_STMT}, {T_ID, REDUCE, NT_STMT}, {T_R_BRACE, REDUCE, NT_STMT}, {T_IF, REDUCE, NT_STMT}, {T_WHILE, REDUCE, NT_STMT}, {T_RETURN, REDUCE, NT_STMT}}, {}},
+        {{{T_BOOLSTR, SHIFT, 65}}, {{NT_COND, 64}}},
+        {{{T_BOOLSTR, SHIFT, 65}}, {{NT_COND, 66}}},
+        {{{T_SEMI, SHIFT, 13}, {T_ASSIGN, SHIFT, 15}}, {}},
+        {{{T_R_PAREN, REDUCE, NT_MOREARGS}, {T_COMMA, SHIFT, 41}}, {{NT_MOREARGS, 67}}},
+        {{{T_VTYPE, REDUCE, NT_F_DECL}, {T_R_BRACE, REDUCE, NT_F_DECL}, {T_CLASS, REDUCE, NT_F_DECL}, {T_DOLLARS, REDUCE, NT_F_DECL}}, {}},
+        {{{T_SEMI, SHIFT, 68}}, {}},
+        {{{T_R_PAREN, SHIFT, 69}, {T_COMP, SHIFT, 70}}, {}},
+        
+};
 
 bool evaluate_production(vector<RHSEntry> &tokens, TokenIt &cursor, ProductionEntry &production)
 {
