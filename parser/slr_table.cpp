@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <stack>
 #include <optional>
+#include <deque>
 
 using TokenIt = vector<RHSEntry>::iterator;
 
@@ -98,7 +99,7 @@ static const SLRTableEntry SLR_TABLE[] =
 
         };
 
-bool evaluate_production(vector<RHSEntry> &tokens, TokenIt &cursor, ProductionEntry &production) {
+bool evaluate_production(const vector<RHSEntry> &tokens, const TokenIt &cursor, const ProductionEntry &production) {
     auto lhs = cursor;
     for (auto symbol = production.rbegin(); symbol != production.rend(); ++symbol) {
         if (lhs == tokens.begin()) {
@@ -112,7 +113,7 @@ bool evaluate_production(vector<RHSEntry> &tokens, TokenIt &cursor, ProductionEn
     return true;
 }
 
-bool is_production_reducible(vector<RHSEntry> &tokens, TokenIt &cursor, NonTerminals production_symbol) {
+bool is_production_reducible(const vector<RHSEntry> &tokens, const TokenIt &cursor, const NonTerminals production_symbol) {
     auto productions = PRODUCTIONS.at(production_symbol);
 
     for (auto &production : productions) {
@@ -123,7 +124,7 @@ bool is_production_reducible(vector<RHSEntry> &tokens, TokenIt &cursor, NonTermi
     return false;
 }
 
-std::optional<GotoEntry> try_match_goto(vector<RHSEntry> &tokens, TokenIt &cursor, vector<GotoEntry> &gotos) {
+std::optional<GotoEntry> try_match_goto(const vector<RHSEntry> &tokens, const TokenIt &cursor, const vector<GotoEntry> &gotos) {
     for (auto goto_entry : gotos) {
         if (is_production_reducible(tokens, cursor, goto_entry.symbol)) {
             return goto_entry;
@@ -132,26 +133,53 @@ std::optional<GotoEntry> try_match_goto(vector<RHSEntry> &tokens, TokenIt &curso
     return std::nullopt;
 }
 
-std::optional<ActionEntry> try_match_action(vector<RHSEntry> &tokens, TokenIt &cursor, vector<ActionEntry> &actions) {
+std::optional<ActionEntry> try_match_action(const vector<RHSEntry> &tokens, const TokenIt &cursor, const vector<ActionEntry> &actions) {
     for (auto action : actions) {
         if (action.symbol == cursor->value) {
-            switch (action.type) {
-                case SHIFT:
-                    break;
-                case REDUCE:
-                    break;
-            }
+            return action;
         }
     }
     return std::nullopt;
 }
 
-bool parse_tokens(vector<RHSEntry> tokens) {
+void apply_action(vector<RHSEntry> &tokens, TokenIt &cursor, ActionEntry &action, std::stack<int> &states) {
+    switch (action.type) {
+        case SHIFT:
+            ++cursor;
+            states.push(action.value);
+            break;
+        case REDUCE:
+            tokens.
+            break;
+        case ACCEPTING:
+            return;
+    }
+}
+
+void apply_goto(vector<RHSEntry> &tokens, TokenIt &cursor, GotoEntry &goto_entry) {
+
+}
+
+bool parse_tokens(vector<RHSEntry> tokens) { //gona refactor tokens and lhs handling
     std::stack<int> state_stack;
     TokenIt cursor;
 
     state_stack.push(0); // set start state to 0
     while (cursor != tokens.end()) {
+        auto action = try_match_action(tokens, cursor, SLR_TABLE[state_stack.top()].actions);
+        if (action.has_value()) {
+            if (action->type == ACCEPTING) {
+                return true;
+            }
+            apply_action(tokens, cursor, *action, state_stack);
+            continue;
+        }
+        auto goto_entry = try_match_goto(tokens, cursor, SLR_TABLE[state_stack.top()].gotos);
+        if (goto_entry.has_value()) {
+            apply_goto(tokens, cursor, *goto_entry);
+            continue;
+        }
+        //Nothing else to do
     }
     return false;
 }
