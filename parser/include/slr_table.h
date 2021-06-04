@@ -57,7 +57,8 @@ typedef enum {
 
 typedef enum {
     SHIFT,
-    REDUCE
+    REDUCE,
+    ACCEPTING
 } ActionType;
 
 typedef struct {
