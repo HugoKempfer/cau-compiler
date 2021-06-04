@@ -77,15 +77,12 @@ typedef struct {
 } SLRTableEntry;
 
 typedef enum {
-    TERMINAL, NON_TERMINAL
+    TERM, NTERM
 } RHSType;
 
 struct RHSEntry {
     RHSType type;
-    union {
-        Terminals terminal;
-        NonTerminals nonTerminals;
-    } value;
+    int value;
 };
 
 using ProductionEntry = vector<struct RHSEntry>;
