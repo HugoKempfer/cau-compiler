@@ -88,9 +88,6 @@ struct RHSEntry {
     } value;
 };
 
-typedef struct {
-    NonTerminals non_terminal;
-    vector<struct RHSEntry> rhs;
-} ProductionEntry;
+using ProductionEntry = vector<struct RHSEntry>;
 
 #endif //PARSER_SLR_TABLE_H
