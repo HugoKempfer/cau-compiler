@@ -80,9 +80,17 @@ typedef enum {
     TERM, NTERM
 } RHSType;
 
-struct RHSEntry {
+struct RHSEntry { // Maybe rename
     RHSType type;
     int value;
+
+    bool operator==(const RHSEntry &other) const {
+        return this->type == other.type && this->value == other.value;
+    }
+
+    bool operator!=(const RHSEntry &other) const {
+        return this->type != other.type && this->value != other.value;
+    }
 };
 
 using ProductionEntry = vector<struct RHSEntry>;

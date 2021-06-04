@@ -3,8 +3,12 @@
 //
 
 #include "include/slr_table.h"
+#include <ranges>
 #include <unordered_map>
 #include <stack>
+#include <optional>
+
+using TokenIt = vector<RHSEntry>::iterator;
 
 static const std::unordered_map<NonTerminals, vector<ProductionEntry>> PRODUCTIONS =
         {{NT_CODE_PRIME, {{{NTERM, NT_CODE}}}},
@@ -29,9 +33,55 @@ static const SLRTableEntry SLR_TABLE[] = {
         {{{T_VTYPE, SHIFT, 5}, {T_CLASS, SHIFT, 6}, {T_DOLLARS, REDUCE, 4}}, {{NT_CODE, 1}, {NT_V_DECL, 2}, {NT_F_DECL, 3}, {NT_C_DECL, 4}}},
         {{},                                                                 {}}};
 
+bool evaluate_production(vector<RHSEntry> &tokens, TokenIt &cursor, ProductionEntry &production) {
+    auto lhs = cursor;
+    for (auto symbol = production.rbegin(); symbol != production.rend(); ++symbol) {
+        if (lhs == tokens.begin()) {
+            return false;
+        }
+        --lhs;
+        if (*lhs != *symbol) {
+            return false;
+        }
+    }
+    return true;
+}
 
-bool parse_tokens(vector<Terminals> tokens) {
-    using TokenIt = vector<Terminals>::iterator;
+bool is_production_reducible(vector<RHSEntry> &tokens, TokenIt &cursor, NonTerminals production_symbol) {
+    auto productions = PRODUCTIONS.at(production_symbol);
+
+    for (auto &production : productions) {
+        if (evaluate_production(tokens, cursor, production)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::optional<GotoEntry> try_match_goto(vector<RHSEntry> &tokens, TokenIt &cursor, vector<GotoEntry> &gotos) {
+    for (auto goto_entry : gotos) {
+        if (is_production_reducible(tokens, cursor, goto_entry.symbol)) {
+            return goto_entry;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<ActionEntry> try_match_action(vector<RHSEntry> &tokens, TokenIt &cursor, vector<ActionEntry> &actions) {
+    for (auto action : actions) {
+        if (action.symbol == cursor->value) {
+            switch (action.type) {
+                case SHIFT:
+                    break;
+                case REDUCE:
+                    break;
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+bool parse_tokens(vector<RHSEntry> tokens) {
     std::stack<int> state_stack;
     TokenIt cursor;
 
