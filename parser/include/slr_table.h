@@ -6,6 +6,7 @@
 #define PARSER_SLR_TABLE_H
 
 #include <vector>
+#include <cstdio>
 
 using std::vector;
 
@@ -95,7 +96,14 @@ struct RHSEntry { // Maybe rename
     }
 
     bool operator!=(const RHSEntry &other) const {
-        return this->type != other.type && this->value != other.value;
+        return this->type != other.type || this->value != other.value;
+    }
+
+    bool operator==(const NonTerminals &other) const {
+        if (this->type != NTERM) {
+            return false;
+        }
+        return this->value == other;
     }
 };
 
@@ -132,13 +140,16 @@ public:
     vector<RHSEntry> _lhs;
     vector<Terminals> _rhs;
 
-    bool is_reducible_by_production(const vector<RHSEntry> &production) const {
+    bool is_reducible_by_production(RHSEntry symbol, const vector<RHSEntry> &production) const {
         auto lhs_it = _lhs.rbegin();
-        for (auto symbol = production.rbegin(); symbol != production.rend(); ++symbol) {
+        if (_lhs.back() == symbol) {
+            return false;
+        }
+        for (auto it = production.rbegin(); it != production.rend(); ++it) {
             if (lhs_it == _lhs.rend()) {
                 return false;
             }
-            if (*lhs_it != *symbol) {
+            if (*lhs_it != *it) {
                 return false;
             }
             ++lhs_it;
