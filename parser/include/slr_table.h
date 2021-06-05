@@ -55,17 +55,22 @@ typedef enum {
 
 /* ---=== SLR TABLE ===--- */
 
+struct RHSEntry;
+
 typedef enum {
     SHIFT,
     REDUCE,
     ACCEPTING
 } ActionType;
 
-typedef struct {
+struct ActionEntry {
     Terminals symbol;
     ActionType type;
     int value;
-} ActionEntry;
+    int index = 0;
+};
+
+typedef struct ActionEntry ActionEntry;
 
 typedef struct {
     NonTerminals symbol;
@@ -92,6 +97,44 @@ struct RHSEntry { // Maybe rename
     bool operator!=(const RHSEntry &other) const {
         return this->type != other.type && this->value != other.value;
     }
+};
+
+class Expression {
+
+public:
+    Expression() = delete;
+
+    explicit Expression(vector<Terminals> &tokens) {
+        _rhs = tokens;
+        _cursor = _rhs.begin();
+    }
+
+    void shift(int offset) {
+        for (; offset != 0; --offset) {
+            if (_cursor != _rhs.end()) {
+                _lhs.push_back({TERM, *_cursor});
+                ++_cursor;
+            }
+        }
+    }
+
+    Terminals next_symbol() {
+        return *_cursor;
+    }
+
+    void reduce(NonTerminals symbol, vector<RHSEntry> &production) {
+        for (auto it = production.size(); it != 0; --it) {
+            _lhs.pop_back();
+        }
+        _lhs.push_back({NTERM, symbol});
+    }
+
+    vector<RHSEntry> _lhs;
+    vector<Terminals> _rhs;
+
+private:
+    vector<Terminals>::iterator _cursor;
+
 };
 
 using ProductionEntry = vector<struct RHSEntry>;
