@@ -122,7 +122,7 @@ public:
         return *_cursor;
     }
 
-    void reduce(NonTerminals symbol, vector<RHSEntry> &production) {
+    void reduce(NonTerminals symbol, const vector<RHSEntry> &production) {
         for (auto it = production.size(); it != 0; --it) {
             _lhs.pop_back();
         }
@@ -131,6 +131,20 @@ public:
 
     vector<RHSEntry> _lhs;
     vector<Terminals> _rhs;
+
+    bool is_reducible_by_production(const vector<RHSEntry> &production) const {
+        auto lhs_it = _lhs.rbegin();
+        for (auto symbol = production.rbegin(); symbol != production.rend(); ++symbol) {
+            if (lhs_it == _lhs.rend()) {
+                return false;
+            }
+            if (*lhs_it != *symbol) {
+                return false;
+            }
+            ++lhs_it;
+        }
+        return true;
+    }
 
 private:
     vector<Terminals>::iterator _cursor;

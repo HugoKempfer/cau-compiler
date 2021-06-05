@@ -106,29 +106,24 @@ static const SLRTableEntry SLR_TABLE[] =
                 {{{T_L_BRACE, SHIFT,     74}},                                                                                                                                                                                                                                          {}},
                 {{{T_VTYPE,   SHIFT,     51},          {T_ID,      SHIFT,  52},        {T_R_BRACE,   REDUCE, NT_BLOCK},  {T_IF,      SHIFT,  49},        {T_WHILE,   SHIFT,  50},        {T_RETURN, REDUCE, NT_BLOCK}},                                                                 {{NT_V_DECL,   47}, {NT_ASSIGN, 48}, {NT_BLOCK,  75}, {NT_STMT,   46}}},
                 {{{T_R_PAREN, REDUCE,    NT_COND},     {T_COMP,    SHIFT,  70}},                                                                                                                                                                                                        {}},
-                {{{T_VTYPE,   SHIFT,     51},          {T_ID,      SHIFT,  52},        {T_R_BRACE,   REDUCE, NT_BLOCK},  {T_IF,      SHIFT,  49},        {T_WHILE,   SHIFT,  50},        {T_RETURN, REDUCE, NT_BLOCK}},                                                                 {{NT_V_DECL,   47}, {NT_ASSIGN, 48}, {NT_BLOCK,  76}, {NT_STMT,   46}}},
+                {{{T_VTYPE,   SHIFT,     51},          {T_ID,      SHIFT,  52},        {T_R_BRACE,   REDUCE, NT_BLOCK, 1},  {T_IF,      SHIFT,  49},        {T_WHILE,   SHIFT,  50},        {T_RETURN, REDUCE, NT_BLOCK, 1}},                                                                 {{NT_V_DECL,   47}, {NT_ASSIGN, 48}, {NT_BLOCK,  76}, {NT_STMT,   46}}},
                 {{{T_R_BRACE, SHIFT,     77}},                                                                                                                                                                                                                                          {}},
                 {{{T_R_BRACE, SHIFT,     78}},                                                                                                                                                                                                                                          {}},
-                {{{T_VTYPE,   REDUCE,    NT_ELSE},     {T_ID,      REDUCE, NT_ELSE},   {T_R_BRACE,   REDUCE, NT_ELSE},   {T_IF,      REDUCE, NT_ELSE},   {T_WHILE,   REDUCE, NT_ELSE},   {T_ELSE,   SHIFT,  80},        {T_RETURN, REDUCE, NT_ELSE}},                                   {{NT_ELSE,     79}}},
-                {{{T_VTYPE,   REDUCE,    NT_STMT},     {T_ID,      REDUCE, NT_STMT},   {T_R_BRACE,   REDUCE, NT_STMT},   {T_IF,      REDUCE, NT_STMT},   {T_WHILE,   REDUCE, NT_STMT},   {T_RETURN, REDUCE, NT_STMT}},                                                                  {}},
-                {{{T_VTYPE,   REDUCE,    NT_STMT},     {T_ID,      REDUCE, NT_STMT},   {T_R_BRACE,   REDUCE, NT_STMT},   {T_IF,      REDUCE, NT_STMT},   {T_WHILE,   REDUCE, NT_STMT},   {T_RETURN, REDUCE, NT_STMT}},                                                                  {}},
+                {{{T_VTYPE,   REDUCE,    NT_ELSE, 1},     {T_ID,      REDUCE, NT_ELSE, 1},   {T_R_BRACE,   REDUCE, NT_ELSE, 1},   {T_IF,      REDUCE, NT_ELSE, 1},   {T_WHILE,   REDUCE, NT_ELSE, 1},   {T_ELSE,   SHIFT,  80},        {T_RETURN, REDUCE, NT_ELSE, 1}},                                   {{NT_ELSE,     79}}},
+                {{{T_VTYPE,   REDUCE,    NT_STMT, 3},     {T_ID,      REDUCE, NT_STMT, 3},   {T_R_BRACE,   REDUCE, NT_STMT, 3},   {T_IF,      REDUCE, NT_STMT, 3},   {T_WHILE,   REDUCE, NT_STMT, 3},   {T_RETURN, REDUCE, NT_STMT, 3}},                                                                  {}},
+                {{{T_VTYPE,   REDUCE,    NT_STMT, 2},     {T_ID,      REDUCE, NT_STMT, 2},   {T_R_BRACE,   REDUCE, NT_STMT, 2},   {T_IF,      REDUCE, NT_STMT, 2},   {T_WHILE,   REDUCE, NT_STMT, 2},   {T_RETURN, REDUCE, NT_STMT, 2}},                                                                  {}},
                 {{{T_L_BRACE, SHIFT,     81}},                                                                                                                                                                                                                                          {}},
-                {{{T_VTYPE,   SHIFT,     51},          {T_ID,      SHIFT,  52},        {T_R_BRACE,   REDUCE, NT_BLOCK},  {T_IF,      SHIFT,  49},        {T_WHILE,   SHIFT,  50},        {T_RETURN, REDUCE, NT_BLOCK}},                                                                 {{NT_V_DECL,   47}, {NT_ASSIGN, 48}}},
+                {{{T_VTYPE,   SHIFT,     51},          {T_ID,      SHIFT,  52},        {T_R_BRACE,   REDUCE, NT_BLOCK, 1},  {T_IF,      SHIFT,  49},        {T_WHILE,   SHIFT,  50},        {T_RETURN, REDUCE, NT_BLOCK, 1}},                                                                 {{NT_V_DECL,   47}, {NT_ASSIGN, 48}}},
                 {{{T_R_BRACE, SHIFT,     83}},                                                                                                                                                                                                                                          {}},
-                {{{T_VTYPE,   REDUCE,    NT_ELSE},     {T_ID,      REDUCE, NT_ELSE},   {T_R_BRACE,   REDUCE, NT_ELSE},   {T_IF,      REDUCE, NT_ELSE},   {T_WHILE,   REDUCE, NT_ELSE},   {T_RETURN, REDUCE, NT_ELSE}},                                                                  {}}
+                {{{T_VTYPE,   REDUCE,    NT_ELSE, 0},     {T_ID,      REDUCE, NT_ELSE, 0},   {T_R_BRACE,   REDUCE, NT_ELSE, 0},   {T_IF,      REDUCE, NT_ELSE, 0},   {T_WHILE,   REDUCE, NT_ELSE, 0},   {T_RETURN, REDUCE, NT_ELSE, 0}},                                                                  {}}
         };
 
-bool evaluate_production(const Expression &expr, const ProductionEntry &production) {
-    for (auto symbol = production.rbegin(); symbol != production.rend(); ++symbol) {
-    }
-    return true;
-}
 
 bool is_production_reducible(const Expression &expr, const NonTerminals production_symbol) {
     auto productions = PRODUCTIONS.at(production_symbol);
 
     for (auto &production : productions) {
-        if (true) { // eval expr
+        if (expr.is_reducible_by_production(production)) { // eval expr
             return true;
         }
     }
@@ -146,9 +141,9 @@ std::optional<GotoEntry> try_match_goto(const Expression &expr, const vector<Got
 
 std::optional<ActionEntry> try_match_action(Expression &expr, const vector<ActionEntry> &actions) {
     for (auto action : actions) {
-        //if (action.symbol == cursor->value) {
-        //    return action;
-        //}
+        if (action.symbol == expr.next_symbol()) {
+            return action;
+        }
     }
     return std::nullopt;
 }
@@ -162,7 +157,10 @@ void apply_action(Expression &expr, ActionEntry &action, std::stack<int> &states
         case REDUCE: {
             auto symbol = static_cast<NonTerminals>(action.value);
             auto &production = PRODUCTIONS.at(symbol);
-            //expr.reduce(symbol, production.);
+            expr.reduce(symbol, production[action.index]);
+            for (auto it = production[action.index].size(); it != 0; --it) {
+                states.pop();
+            }
         }
             break;
         case ACCEPTING:
@@ -170,7 +168,7 @@ void apply_action(Expression &expr, ActionEntry &action, std::stack<int> &states
     }
 }
 
-bool parse_tokens(vector<Terminals> tokens) { //gona refactor tokens and _lhs handling
+bool parse_tokens(vector<Terminals> tokens) {
     std::stack<int> state_stack;
     Expression expr(tokens);
 
