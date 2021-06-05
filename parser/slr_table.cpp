@@ -96,8 +96,26 @@ static const SLRTableEntry SLR_TABLE[] =
                 {{{T_VTYPE,   REDUCE,    NT_F_DECL},   {T_R_BRACE, REDUCE, NT_F_DECL}, {T_CLASS,     REDUCE, NT_F_DECL}, {T_DOLLARS, REDUCE, NT_F_DECL}},                                                                                                                              {}},
                 {{{T_SEMI,    SHIFT,     68}},                                                                                                                                                                                                                                         {}},
                 {{{T_R_PAREN, SHIFT,     69},          {T_COMP,    SHIFT,  70}},                                                                                                                                                                                                       {}},
-
-        };
+                {{{T_R_PAREN, REDUCE, NT_COND}, {T_COMP, REDUCE, NT_COND}}, {}},
+                {{{T_R_PAREN, SHIFT, 71}, {T_COMP, SHIFT, 70}}, {}},
+                {{{T_L_PAREN, REDUCE, NT_MOREARGS}}, {}},
+                {{{T_R_BRACE, REDUCE, NT_RETURN}}, {}},
+                {{{T_L_BRACE, SHIFT, 72}}, {}},
+                {{{T_BOOLSTR, SHIFT, 65}}, {NT_COND, 73}},
+                {{{T_L_BRACE, SHIFT, 74}}, {}},
+                {{{T_VTYPE, SHIFT, 51}, {T_ID, SHIFT, 52}, {T_R_BRACE, REDUCE, NT_BLOCK}, {T_IF, SHIFT, 49}, {T_WHILE, SHIFT, 50}, {T_RETURN, REDUCE, NT_BLOCK}}, {{NT_V_DECL, 47}, {NT_ASSIGN, 48}, {NT_BLOCK, 75}, {NT_STMT, 46}}},
+                {{{T_R_PAREN, REDUCE, NT_COND}, {T_COMP, SHIFT, 70}}, {}},
+                {{{T_VTYPE, SHIFT, 51}, {T_ID, SHIFT, 52}, {T_R_BRACE, REDUCE, NT_BLOCK}, {T_IF, SHIFT, 49}, {T_WHILE, SHIFT, 50}, {T_RETURN, REDUCE, NT_BLOCK}}, {{NT_V_DECL, 47}, {NT_ASSIGN, 48}, {NT_BLOCK, 76}, {NT_STMT, 46}}},
+                {{{T_R_BRACE, SHIFT, 77}}, {}},
+                {{{T_R_BRACE, SHIFT, 78}}, {}},
+                {{{T_VTYPE, REDUCE, NT_ELSE}, {T_ID, REDUCE, NT_ELSE}, {T_R_BRACE, REDUCE, NT_ELSE}, {T_IF, REDUCE, NT_ELSE}, {T_WHILE, REDUCE, NT_ELSE}, {T_ELSE, SHIFT, 80}, {T_RETURN, REDUCE, NT_ELSE}}, {{NT_ELSE, 79}}},
+                {{{T_VTYPE, REDUCE, NT_STMT}, {T_ID, REDUCE, NT_STMT}, {T_R_BRACE, REDUCE, NT_STMT}, {T_IF, REDUCE, NT_STMT}, {T_WHILE, REDUCE, NT_STMT}, {T_RETURN, REDUCE, NT_STMT}}, {}},
+                {{{T_VTYPE, REDUCE, NT_STMT}, {T_ID, REDUCE, NT_STMT}, {T_R_BRACE, REDUCE, NT_STMT}, {T_IF, REDUCE, NT_STMT}, {T_WHILE, REDUCE, NT_STMT}, {T_RETURN, REDUCE, NT_STMT}}, {}},
+                {{{T_L_BRACE, SHIFT, 81}}, {}},
+                {{{T_VTYPE, SHIFT, 51}, {T_ID, SHIFT, 52}, {T_R_BRACE, REDUCE, NT_BLOCK}, {T_IF, SHIFT, 49}, {T_WHILE, SHIFT, 50}, {T_RETURN, REDUCE, NT_BLOCK}}, {{NT_V_DECL, 47}, {NT_ASSIGN, 48}}},
+                {{{T_R_BRACE, SHIFT, 83}}, {}},
+                {{{T_VTYPE, REDUCE, NT_ELSE}, {T_ID, REDUCE, NT_ELSE}, {T_R_BRACE, REDUCE, NT_ELSE}, {T_IF, REDUCE, NT_ELSE}, {T_WHILE, REDUCE, NT_ELSE}, {T_RETURN, REDUCE, NT_ELSE}}, {}}
+        }
 
 bool evaluate_production(const vector<RHSEntry> &tokens, const TokenIt &cursor, const ProductionEntry &production) {
     auto lhs = cursor;
