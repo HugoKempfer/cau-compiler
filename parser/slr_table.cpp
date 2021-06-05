@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <stack>
 #include <optional>
+#include <iostream>
 
 using TokenIt = vector<RHSEntry>::iterator;
 
@@ -182,6 +183,7 @@ bool parse_tokens(vector<Terminals> tokens) {
 
     state_stack.push(0); // set start state to 0
     while (true) {
+        std::cout << "Current state => " << state_stack.top() << std::endl;
         auto action = try_match_action(expr, SLR_TABLE[state_stack.top()].actions);
         if (action.has_value()) {
             if (action->type == ACCEPTING) {
