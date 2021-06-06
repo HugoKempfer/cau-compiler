@@ -1,0 +1,17 @@
+<V_TYPE, int>
+<ID, main>
+<PAREN, (>
+<PAREN, )>
+<BLOCK, {>
+<V_TYPE, int>
+<ID, a>
+<ASSIGN, =>
+<S_INT, 3>
+<SC, ;>
+<ID, a>
+<ASSIGN, =>
+<S_INT, 4>
+<KEYWORD, return>
+<ID, a>
+<SC, ;>
+<BLOCK, }>
