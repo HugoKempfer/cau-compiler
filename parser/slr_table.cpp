@@ -127,8 +127,7 @@ bool is_production_reducible(const Expression &expr, const NonTerminals producti
     for (auto &production : productions) {
         if (production.empty() && expr._lhs.back() == production_symbol) {
             return true;
-        }
-        else if (expr.is_reducible_by_production({NTERM, production_symbol}, production)) {
+        } else if (expr.is_reducible_by_production({NTERM, production_symbol}, production)) {
             return true;
         }
     }
@@ -162,7 +161,8 @@ bool apply_action(Expression &expr, ActionEntry &action, std::stack<int> &states
         case REDUCE: {
             auto symbol = static_cast<NonTerminals>(action.value);
             auto &production = PRODUCTIONS.at(symbol);
-            if (!expr.is_reducible_by_production({NTERM, symbol}, production[action.index])) {
+            //Skip already reduced epsilon productions
+            if (production[action.index].empty() && !expr.is_reducible_by_production({NTERM, symbol}, production[action.index])) {
                 return false;
             }
             expr.reduce(symbol, production[action.index]);
