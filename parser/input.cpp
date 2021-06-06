@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include <fstream>
 #include "include/slr_table.h"
 
 static const std::unordered_map<std::string, Terminals> tokens_type = {
@@ -59,13 +60,13 @@ Terminals match_token(std::string &type, std::string &value) {
         if (value == "return")
             return T_RETURN;
     }
-    std::cout << "WOW LA CHANKLA" << std::endl;
 }
 
-vector<Terminals> get_tokens_from_input() {
+vector<Terminals> get_tokens_from_input(char *filename) {
     vector<Terminals> tokens;
+    std::ifstream source_file(filename);
 
-    for (std::string line; std::getline(std::cin, line);) {
+    for (std::string line; std::getline(source_file, line);) {
         auto comma_pos = line.find_first_of(',');
         auto type = line.substr(1, comma_pos - 1);
         auto value = line.substr(comma_pos + 2, (line.find_last_of('>')) - (comma_pos + 2));
