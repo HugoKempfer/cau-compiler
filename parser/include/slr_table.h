@@ -42,6 +42,8 @@ typedef enum {
     NT_ASSIGN,
     NT_RHS,
     NT_EXPR,
+    NT_EXPR_PRIME,
+    NT_EXPR_PRIME_PRIME,
     NT_F_DECL,
     NT_ARG,
     NT_MOREARGS,
